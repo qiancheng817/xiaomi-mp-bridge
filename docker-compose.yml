@@ -1,0 +1,24 @@
+services:
+  xiaomi-mp-bridge:
+    image: python:3.12-alpine
+    container_name: xiaomi-mp-bridge
+    restart: always
+    # 使用宿主机网络，容器直接占用 9080 端口，无需端口映射
+    network_mode: host
+    volumes:
+      # 把 app.py 放到 NAS 的该目录下（按需修改左侧路径）
+      - /vol1/1000/docker/xiaomi-mp-bridge/app/app.py:/app/app.py:ro
+    environment:
+      # MoviePilot 访问地址（必填）
+      - MP_BASE_URL=http://192.168.5.3:3000
+      # MoviePilot API 令牌：设置 -> 系统 -> 基础设置 -> API令牌（必填）
+      - MP_TOKEN=
+      # 本服务监听端口
+      - PORT=9080
+      # 剧集订阅的默认季数
+      - TV_SEASON=1
+      # 可选：Webhook 访问密钥，配置后需带 ?key=xxx 访问
+      # - WEBHOOK_KEY=your_secret_key
+      - TZ=Asia/Shanghai
+    working_dir: /app
+    command: python -u app.py
