@@ -45,8 +45,9 @@ flowchart LR
 
 ### 方式一：docker-compose（推荐）
 
-重点！！！：在 NAS 上创建目录并放入 `app.py`
+1. 重点！！！在 NAS 上创建目录并放入 `app.py`：
 
+```yaml
 services:
   xiaomi-mp-bridge:
     image: python:3.12-alpine
@@ -71,6 +72,20 @@ services:
       - TZ=Asia/Shanghai
     working_dir: /app
     command: python -u app.py
+```
+
+2. 修改 `docker-compose.yml` 中的环境变量（见下方[配置项](#配置项)），然后启动：
+
+```bash
+docker compose up -d
+```
+
+3. 验证服务是否活着：
+
+```bash
+curl http://192.168.5.3:9080/health
+# {"status": "ok", "ts": 1710000000}
+```
 
 ### 方式二：本地构建镜像
 
