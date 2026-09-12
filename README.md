@@ -45,25 +45,32 @@ flowchart LR
 
 ### 方式一：docker-compose（推荐）
 
-1. 在 NAS 上创建目录并放入 `app.py`：
+重点！！！：在 NAS 上创建目录并放入 `app.py`
 
-   ```bash
-   mkdir -p /vol1/1000/docker/xiaomi-mp-bridge/app
-   # 把仓库里的 app.py 上传到该目录
-   ```
-
-2. 修改 `docker-compose.yml` 中的环境变量（见下方[配置项](#配置项)），然后启动：
-
-   ```bash
-   docker compose up -d
-   ```
-
-3. 验证服务是否活着：
-
-   ```bash
-   curl http://192.168.5.3:9080/health
-   # {"status": "ok", "ts": 1710000000}
-   ```
+services:
+  xiaomi-mp-bridge:
+    image: python:3.12-alpine
+    container_name: xiaomi-mp-bridge
+    restart: always
+    # 使用宿主机网络，容器直接占用 9080 端口，无需端口映射
+    network_mode: host
+    volumes:
+      # 把 app.py 放到 NAS 的该目录下（按需修改左侧路径）
+      - /vol1/1000/docker/xiaomi-mp-bridge/app/app.py:/app/app.py:ro
+    environment:
+      # MoviePilot 访问地址（必填）
+      - MP_BASE_URL=http://192.168.5.3:3000
+      # MoviePilot API 令牌：设置 -> 系统 -> 基础设置 -> API令牌（必填）
+      - MP_TOKEN=
+      # 本服务监听端口
+      - PORT=9080
+      # 剧集订阅的默认季数
+      - TV_SEASON=1
+      # 可选：Webhook 访问密钥，配置后需带 ?key=xxx 访问
+      # - WEBHOOK_KEY=your_secret_key
+      - TZ=Asia/Shanghai
+    working_dir: /app
+    command: python -u app.py
 
 ### 方式二：本地构建镜像
 
