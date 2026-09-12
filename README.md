@@ -1,6 +1,6 @@
 # xiaomi-mp-bridge
 
-> 用嘴订阅电影 —— 一句话让小爱音箱帮你把片子加进 MoviePilot。
+> 语控小爱订阅电影
 
 `xiaomi-mp-bridge` 是一个超轻量的桥接服务：把 **小爱音箱** 的语音指令，经由 **SongLoft（小爱音箱接入插件）** 的 Webhook 推送，转换成 **MoviePilot v2** 的订阅请求。
 
