@@ -241,4 +241,4 @@ xiaomi-mp-bridge/
 
 ## 许可
 
-[MIT License](./LICENSE) — 随便用，出问题不负责。
+随便用，出问题不负责。
